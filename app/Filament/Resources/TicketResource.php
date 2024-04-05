@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TicketResource\Pages;
+use App\Filament\Resources\TicketResource\RelationManagers\CategoriesRelationManager;
 use App\Models\Ticket;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -17,6 +18,7 @@ use Filament\Tables\Table;
 class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
+    //self::$model == Ticket::class
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -31,11 +33,13 @@ class TicketResource extends Resource
                 Textarea::make('description')
                     ->rows(3),
                 Select::make('status')
-                    ->options(Ticket::STATUS)
-                    ->required(),
+                    ->options(self::$model::STATUS)
+                    ->required()
+                    ->in(self::$model::STATUS),
                 Select::make('priority')
-                    ->options(Ticket::PRIORITY)
-                    ->required(),
+                    ->options(self::$model::PRIORITY)
+                    ->required()
+                    ->in(self::$model::PRIORITY),
                 Select::make('assigned_to')
                     ->relationship('assignedTo', 'name')
                     ->required(),
@@ -79,7 +83,7 @@ class TicketResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CategoriesRelationManager::class,
         ];
     }
 
