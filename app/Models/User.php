@@ -42,4 +42,34 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        $permissonArray = [];
+
+        foreach ($this->roles as $role) {
+            foreach ($role->permissions as $singlePermission) {
+                $permissonArray[] = $singlePermission->name;
+            }
+        }
+
+        // dd($permissonArray);
+
+        return collect($permissonArray)->unique()->contains($permission);
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->roles->contains('name', $role);
+    }
+
+    // public function canAccessPanel(Panel $panel): bool
+    // {
+    //     return true;
+    // }
 }
