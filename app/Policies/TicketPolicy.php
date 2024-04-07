@@ -2,25 +2,25 @@
 
 namespace App\Policies;
 
-use App\Models\Permission;
+use App\Models\Ticket;
 use App\Models\User;
 
-class PermissionPolicy
+class TicketPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('permission_access');
+        return $user->hasPermission('ticket_access');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Permission $permission): bool
+    public function view(User $user, Ticket $ticket): bool
     {
-        return $user->hasPermission('permission_show');
+        return $user->hasPermission('ticket_show');
     }
 
     /**
@@ -28,30 +28,29 @@ class PermissionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermission('permission_create');
+        return $user->hasPermission('ticket_create');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Permission $permission): bool
+    public function update(User $user, Ticket $ticket): bool
     {
-
-        return $user->hasPermission('permission_edit');
+        return $user->hasPermission('ticket_edit');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Permission $permission): bool
+    public function delete(User $user, Ticket $ticket): bool
     {
-        return $user->hasPermission('permission_delete');
+        return $user->hasPermission('ticket_delete');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Permission $permission): bool
+    public function restore(User $user, Ticket $ticket): bool
     {
         //
     }
@@ -59,7 +58,7 @@ class PermissionPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Permission $permission): bool
+    public function forceDelete(User $user, Ticket $ticket): bool
     {
         //
     }

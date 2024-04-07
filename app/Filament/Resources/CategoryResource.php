@@ -18,7 +18,7 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
     public static function form(Form $form): Form
     {
@@ -26,7 +26,7 @@ class CategoryResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->lazy()
                     ->autofocus()
                     ->maxLength(255)
@@ -48,7 +48,10 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('slug'),
-                ToggleColumn::make('is_active')->label('Status'),
+                ToggleColumn::make('is_active')
+                    ->label('Status')
+                    ->disabled(! auth()->user()->hasPermission('category_edit')),
+
             ])
             ->filters([
                 //
@@ -59,7 +62,7 @@ class CategoryResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->hidden(! auth()->user()->hasPermission('ticket_edit')),
                 ]),
             ]);
     }
@@ -75,8 +78,8 @@ class CategoryResource extends Resource
     {
         return [
             'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            // 'create' => Pages\CreateCategory::route('/create'),
+            // 'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 }
